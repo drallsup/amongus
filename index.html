@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .asteroid {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-size: cover;
+            cursor: pointer;
+        }
+
+        #startButton {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 15px 30px;
+            font-size: 24px;
+            background-color: #3498db;
+            color: #fff;
+            border-radius: 50px;
+            text-align: center;
+            cursor: pointer;
+        }
+    </style>
+    <title>Among Us Game</title>
+</head>
+<body>
+    <div id="startButton" onclick="startGame()">Start New Game</div>
+
+    <script>
+        let asteroidsRemaining = 20;
+
+        function startGame() {
+            // Remove existing asteroids
+            document.querySelectorAll('.asteroid').forEach(asteroid => asteroid.remove());
+
+            // Reset remaining asteroids count
+            asteroidsRemaining = 20;
+
+            // Create new asteroids
+            for (let i = 0; i < 20; i++) {
+                createAsteroid();
+            }
+        }
+
+        function createAsteroid() {
+            const asteroid = document.createElement('div');
+            asteroid.className = 'asteroid';
+            asteroid.style.top = `${Math.random() * (window.innerHeight - 50)}px`;
+            asteroid.style.left = `${Math.random() * (window.innerWidth - 50)}px`;
+
+            const jetImage = 'amongus.png'; // Replace with the path to your jet image
+            asteroid.style.backgroundImage = `url(${jetImage})`;
+
+            asteroid.addEventListener('click', () => {
+                asteroid.remove();
+                asteroidsRemaining--;
+
+                if (asteroidsRemaining === 0) {
+                    alert('Congratulations! You destroyed all asteroids. Click "Start New Game" to play again.');
+                }
+            });
+
+            document.body.appendChild(asteroid);
+        }
+
+        // Create initial asteroids
+        startGame();
+    </script>
+</body>
+</html>
+
