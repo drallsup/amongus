@@ -29,26 +29,59 @@
             text-align: center;
             cursor: pointer;
         }
+
+        #counter {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            color: #333;
+        }
+
+        #timer {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            font-size: 40px;
+            color: #333;
+        }
     </style>
     <title>Among Us Game</title>
 </head>
 <body>
     <div id="startButton" onclick="startGame()">Start New Game</div>
+    <div id="counter">Crewmates Clicked: 0</div>
+    <div id="timer">Time: 0 seconds</div>
 
     <script>
         let asteroidsRemaining = 20;
+        let asteroidsClicked = 0;
+        let timerSeconds = 0;
+        let timerInterval;
 
         function startGame() {
             // Remove existing asteroids
             document.querySelectorAll('.asteroid').forEach(asteroid => asteroid.remove());
 
-            // Reset remaining asteroids count
+            // Reset remaining asteroids count, clicked asteroids count, and timer
             asteroidsRemaining = 20;
+            asteroidsClicked = 0;
+            timerSeconds = 0;
+
+            // Update counter and timer
+            updateCounter();
+            updateTimer();
 
             // Create new asteroids
             for (let i = 0; i < 20; i++) {
                 createAsteroid();
             }
+
+            // Start the timer interval
+            timerInterval = setInterval(() => {
+                timerSeconds++;
+                updateTimer();
+            }, 1000);
         }
 
         function createAsteroid() {
@@ -63,13 +96,26 @@
             asteroid.addEventListener('click', () => {
                 asteroid.remove();
                 asteroidsRemaining--;
+                asteroidsClicked++;
+
+                // Update counter
+                updateCounter();
 
                 if (asteroidsRemaining === 0) {
-                    alert('Congratulations! You destroyed all asteroids. Click "Start New Game" to play again.');
+                    clearInterval(timerInterval); // Stop the timer
+                    alert(`Congratulations! You destroyed all the Crewmates in ${timerSeconds} seconds. Click "Start New Game" to play again.`);
                 }
             });
 
             document.body.appendChild(asteroid);
+        }
+
+        function updateCounter() {
+            document.getElementById('counter').innerText = `Asteroids Clicked: ${asteroidsClicked}`;
+        }
+
+        function updateTimer() {
+            document.getElementById('timer').innerText = `Time: ${timerSeconds} seconds`;
         }
 
         // Create initial asteroids
@@ -77,4 +123,3 @@
     </script>
 </body>
 </html>
-
